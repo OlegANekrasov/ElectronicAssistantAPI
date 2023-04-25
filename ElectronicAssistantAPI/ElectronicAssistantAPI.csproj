@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="BLL\ViewModels\PersonnelManagement\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
