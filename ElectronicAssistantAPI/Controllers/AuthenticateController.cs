@@ -1,6 +1,7 @@
 ﻿using ElectronicAssistantAPI.BLL.ViewModels.Authentication;
 using ElectronicAssistantAPI.DAL.Models.Authentication;
 using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

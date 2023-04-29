@@ -38,7 +38,7 @@ namespace ElectronicAssistantAPI.BLL.Services.PersonnelManagement
 
         public async Task DeleteAsync(DelPosition model)
         {
-            await ((PositionsRepository)_positionsRepository).DeletePositionAsync(model.Id);
+            await((PositionsRepository)_positionsRepository).DeletePositionAsync(model.Id);
         }
     }
 }

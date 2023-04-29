@@ -70,11 +70,11 @@ namespace ElectronicAssistantAPI.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromBody] DelPosition model)
+        public async Task<ActionResult> Delete([FromBody] DelPosition model)
         {
             try
             {
-                _positionService.DeleteAsync(model);
+                await _positionService.DeleteAsync(model);
                 return new OkResult();
             }
             catch (Exception)
