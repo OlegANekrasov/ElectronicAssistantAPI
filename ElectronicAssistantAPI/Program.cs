@@ -1,6 +1,9 @@
-﻿using ElectronicAssistantAPI.DAL.EF;
+﻿using ElectronicAssistantAPI.BLL.Services.PersonnelManagement;
+using ElectronicAssistantAPI.DAL.EF;
+using ElectronicAssistantAPI.DAL.Extentions;
 using ElectronicAssistantAPI.DAL.Models.Authentication;
 using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
+using ElectronicAssistantAPI.DAL.Repository.PersonnelManagement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -98,6 +101,11 @@ builder.Services.AddSwaggerGen(opt =>
     opt.AddSecurityDefinition("bearerAuth", securityScheme);
     opt.AddSecurityRequirement(securityRequirement);
 });
+
+builder.Services.AddUnitOfWork();
+builder.Services.AddCustomRepository<Position, PositionsRepository>();
+
+builder.Services.AddScoped<IPositionService, PositionService>();
 
 var app = builder.Build();
 

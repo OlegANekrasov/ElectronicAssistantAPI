@@ -34,16 +34,20 @@ namespace ElectronicAssistantAPI.DAL.Repository
             await _db.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(T item)
-        {
-            Set.Remove(item);
-            await _db.SaveChangesAsync();
-        }
-
         public async Task UpdateAsync(T item)
         {
             Set.Update(item);
             await _db.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var item = await Set.FindAsync(id);
+            if (item != null)
+            {
+                Set.Remove(item);
+                await _db.SaveChangesAsync();
+            }
         }
     }
 }
