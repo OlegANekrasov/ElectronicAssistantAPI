@@ -18,11 +18,28 @@ namespace ElectronicAssistantAPI.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetUsers")]
         public async Task<ActionResult<List<UserViewModel>>> Get()
         {
             var users = await _userService.GetAsync();
             return new OkObjectResult(users);
+        }
+
+        [HttpGet("{id}", Name = "GetUserById")]
+        public async Task<ActionResult<UserCompleteViewModel>> Get(string id)
+        {
+            try
+            {
+                var model = await _userService.GetByIdAsync(id);
+                if(model == null)
+                    return NotFound();
+
+                return new OkObjectResult(model);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ошибка при выполнении запроса HttpGet");
+            }
         }
 
     }

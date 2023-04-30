@@ -13,6 +13,8 @@ namespace ElectronicAssistantAPI.BLL
             CreateMap<AddPositionViewModel, AddPosition>();
             CreateMap<DelPositionViewModel, DelPosition>();
             CreateMap<UpdatePositionViewModel, UpdatePosition>();
+
+            CreateMap<User, UserCompleteViewModel>();
         }
     }
 }

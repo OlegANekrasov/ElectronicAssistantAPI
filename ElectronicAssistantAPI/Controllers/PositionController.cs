@@ -6,6 +6,7 @@ using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NpgsqlTypes;
 using System;
 using System.Transactions;
 
@@ -25,14 +26,14 @@ namespace ElectronicAssistantAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetPositions")]
         public IActionResult Get()
         {
             var positions = _positionService.Get();
             return new OkObjectResult(positions);
         }
 
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetPositionById")]
         public IActionResult Get(string id)
         {
             try
