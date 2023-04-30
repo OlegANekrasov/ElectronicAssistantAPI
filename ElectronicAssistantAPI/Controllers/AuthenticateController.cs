@@ -17,16 +17,13 @@ namespace ElectronicAssistantAPI.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IConfiguration _configuration;
 
         public AuthenticateController(
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration)
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _configuration = configuration;
         }
 
         [HttpPost]

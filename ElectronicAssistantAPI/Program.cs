@@ -1,4 +1,6 @@
-﻿using ElectronicAssistantAPI.BLL.Services.PersonnelManagement;
+﻿using AutoMapper;
+using ElectronicAssistantAPI.BLL;
+using ElectronicAssistantAPI.BLL.Services.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.EF;
 using ElectronicAssistantAPI.DAL.Extentions;
 using ElectronicAssistantAPI.DAL.Models.Authentication;
@@ -18,6 +20,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+var mapperConfig = new MapperConfiguration((v) =>
+{
+    v.AddProfile(new MappingProfile());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 // For Entity Framework
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
@@ -32,11 +42,6 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddDefaultUI()
     .AddDefaultTokenProviders();
 
-/*
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
-*/
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

@@ -1,9 +1,12 @@
+using AutoMapper;
 using ElectronicAssistantAPI.BLL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.BLL.Services.PersonnelManagement;
+using ElectronicAssistantAPI.BLL.ViewModels.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Transactions;
 
 namespace ElectronicAssistantAPI.Controllers
@@ -14,10 +17,12 @@ namespace ElectronicAssistantAPI.Controllers
     public class PositionController : ControllerBase
     {
         private readonly IPositionService _positionService;
+        private readonly IMapper _mapper;
 
-        public PositionController(IPositionService positionService)
+        public PositionController(IPositionService positionService, IMapper mapper)
         {
             _positionService = positionService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -42,10 +47,11 @@ namespace ElectronicAssistantAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Position>> Post([FromBody] AddPosition model)
+        public async Task<ActionResult<Position>> Post([FromBody] AddPositionViewModel viewModel)
         {
             try
             {
+                var model = _mapper.Map<AddPosition>(viewModel);
                 var position = await _positionService.AddAsync(model);
                 return CreatedAtAction("Get", new { id = position.Id }, position);
             }
@@ -56,10 +62,11 @@ namespace ElectronicAssistantAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Position>> Put([FromBody] UpdatePosition model)
+        public async Task<ActionResult<Position>> Put([FromBody] UpdatePositionViewModel viewModel)
         {
             try
             {
+                var model = _mapper.Map<UpdatePosition>(viewModel);
                 var position = await _positionService.UpdateAsync(model);
                 return new OkObjectResult(position);
             }
@@ -70,10 +77,11 @@ namespace ElectronicAssistantAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult> Delete([FromBody] DelPosition model)
+        public async Task<ActionResult> Delete([FromBody] DelPositionViewModel viewModel)
         {
             try
             {
+                var model = _mapper.Map<DelPosition>(viewModel);
                 await _positionService.DeleteAsync(model);
                 return new OkResult();
             }
