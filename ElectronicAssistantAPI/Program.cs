@@ -8,6 +8,7 @@ using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.Repository.PersonnelManagement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -41,6 +42,9 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
+
+builder.Services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
+builder.Services.AddSession();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -110,6 +114,7 @@ builder.Services.AddSwaggerGen(opt =>
 builder.Services.AddUnitOfWork();
 builder.Services.AddCustomRepository<Position, PositionsRepository>();
 
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPositionService, PositionService>();
 
 var app = builder.Build();

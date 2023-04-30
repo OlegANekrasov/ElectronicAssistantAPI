@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
-namespace ElectronicAssistantAPI.BLL.ViewModels.Authentication
+namespace ElectronicAssistantAPI.BLL.ViewModels.PersonnelManagement
 {
-    public class UpdateUser
+    public class UpdateUserViewModel
     {
         [Required]
         [Display(Name = "Идентификатор пользователя")]
