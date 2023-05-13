@@ -9,10 +9,12 @@ namespace ElectronicAssistantAPI.BLL.ViewModels.PersonnelManagement
         [Display(Name = "Идентификатор пользователя")]
         public string Id { get; set; }
 
+        [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Имя", Prompt = "Введите имя")]
         public string? FirstName { get; set; }
 
+        [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Фамилия", Prompt = "Введите фамилию")]
         public string? LastName { get; set; }
@@ -43,5 +45,9 @@ namespace ElectronicAssistantAPI.BLL.ViewModels.PersonnelManagement
         [DataType(DataType.Text)]
         [Display(Name = "О себе", Prompt = "Введите данные о себе")]
         public string? About { get; set; }
+
+        [DataType(DataType.Text)]
+        [Display(Name = "Роли")]
+        public List<UserRole> Roles { get; set; }
     }
 }

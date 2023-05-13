@@ -42,5 +42,19 @@ namespace ElectronicAssistantAPI.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<UserCompleteViewModel>> Delete(string id)
+        {
+            try
+            {
+                var result = await _userService.DeleteAsync(id);
+                return new OkObjectResult(result);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ошибка при выполнении запроса HttpDelete");
+            }
+        }
+
     }
 }

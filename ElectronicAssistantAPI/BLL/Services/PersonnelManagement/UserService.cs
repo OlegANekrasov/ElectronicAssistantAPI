@@ -5,6 +5,7 @@ using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.Repository;
 using ElectronicAssistantAPI.DAL.Repository.PersonnelManagement;
 using Microsoft.AspNetCore.Identity;
+using System.Data;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ElectronicAssistantAPI.BLL.Services.PersonnelManagement
@@ -86,24 +87,21 @@ namespace ElectronicAssistantAPI.BLL.Services.PersonnelManagement
             var viewModel = _mapper.Map<UserCompleteViewModel>(user);
             viewModel.FullName = user.GetFullName();
             
-            string? roles = "";
             var userRoles = await _userManager.GetRolesAsync(user);
-            if (userRoles.Any())
+            var roles = new List<UserRole>();
+
+            var allRoles = _roleManager.Roles;
+            foreach (var role in allRoles.OrderBy(o => o))
             {
-                bool first = true;
-                foreach (var role in userRoles.OrderBy(o => o))
+                UserRole userRole = new UserRole() { Name = role.Name };
+                if (userRoles.FirstOrDefault(o => o == role.Name) != null)
                 {
-                    if (first)
-                    {
-                        roles = role;
-                        first = false;
-                    }
-                    else
-                    {
-                        roles += (", " + role);
-                    }
+                    userRole.IsRoleAssigned = true;
                 }
+
+                roles.Add(userRole);
             }
+
             viewModel.Roles= roles;
 
             string? position = "";
@@ -115,6 +113,27 @@ namespace ElectronicAssistantAPI.BLL.Services.PersonnelManagement
             viewModel.Position = position;
 
             return viewModel;
+        }
+
+        public async Task<string> DeleteAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return $"Пользователь с ID '{id}' успешно удален.";
+                }
+                else
+                {
+                    return $"Ошибка удаления пользователя с ID '{id}'.";
+                }
+            }
+            else
+            {
+                return $"Не найден пользователь с ID '{id}'.";
+            }
         }
     }
 }

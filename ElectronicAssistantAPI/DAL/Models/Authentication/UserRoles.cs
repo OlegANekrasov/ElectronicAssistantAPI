@@ -2,7 +2,9 @@
 {
     public static class UserRoles
     {
-        public const string Admin = "Admin";
-        public const string User = "User";
+        public const string Administrator = "Администратор";
+        public const string User = "Пользователь";
+        public const string UserManagement = "Управление пользователями";
+        public const string EquipmentManagement = "Управление оборудованием";
     }
 }

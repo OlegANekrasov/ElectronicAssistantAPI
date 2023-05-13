@@ -18,6 +18,6 @@ namespace ElectronicAssistantAPI.BLL.ViewModels.PersonnelManagement
         public byte[]? Image { get; set; }
         public string? About { get; set; }
         public string? Position { get; set; }
-        public string? Roles { get; set; }
+        public List<UserRole> Roles { get; set; } = new List<UserRole>();
     }
 }

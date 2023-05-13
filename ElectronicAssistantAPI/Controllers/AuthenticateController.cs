@@ -76,10 +76,22 @@ namespace ElectronicAssistantAPI.Controllers
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Administrator))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Administrator));
+
             if (!await _roleManager.RoleExistsAsync(UserRoles.User))
                 await _roleManager.CreateAsync(new IdentityRole(UserRoles.User));
 
-            await _userManager.AddToRoleAsync(user, UserRoles.User);
+            if (!await _roleManager.RoleExistsAsync(UserRoles.UserManagement))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.UserManagement));
+
+            if (!await _roleManager.RoleExistsAsync(UserRoles.EquipmentManagement))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.EquipmentManagement));
+            
+            if(_userManager.Users.Count() == 1)
+                await _userManager.AddToRoleAsync(user, UserRoles.Administrator);
+            else
+                await _userManager.AddToRoleAsync(user, UserRoles.User);
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
