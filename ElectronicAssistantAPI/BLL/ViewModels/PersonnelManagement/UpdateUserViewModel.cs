@@ -47,7 +47,7 @@ namespace ElectronicAssistantAPI.BLL.ViewModels.PersonnelManagement
         public string? About { get; set; }
 
         [DataType(DataType.Text)]
-        [Display(Name = "Роли")]
-        public List<UserRole> Roles { get; set; }
+        [Display(Name = "Должность")]        
+        public string? PositionId { get; set; }
     }
 }

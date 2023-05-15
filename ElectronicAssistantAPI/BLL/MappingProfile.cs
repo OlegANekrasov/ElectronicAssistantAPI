@@ -15,6 +15,10 @@ namespace ElectronicAssistantAPI.BLL
             CreateMap<UpdatePositionViewModel, UpdatePosition>();
 
             CreateMap<User, UserCompleteViewModel>();
+            CreateMap<UpdateUserViewModel, UpdateUser>();
+            CreateMap<UpdateUserPasswordViewModel, UpdateUserPassword>();
+            CreateMap<UpdateUserRoleViewModel, UpdateUserRole>();
+            CreateMap<UpdateUser, User>();
         }
     }
 }

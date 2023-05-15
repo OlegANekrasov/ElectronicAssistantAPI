@@ -8,7 +8,9 @@ namespace ElectronicAssistantAPI.BLL.Services.PersonnelManagement
     {
         Task<List<UserViewModel>> GetAsync();
         Task<UserCompleteViewModel> GetByIdAsync(string id);
-        //Task<User> UpdateAsync(UpdateUser model);
+        Task<UserCompleteViewModel> UpdateAsync(UpdateUser model);
+        Task<UserCompleteViewModel> UpdatePasswordAsync(UpdateUserPassword model);
+        Task<UserCompleteViewModel> UpdateRoleAsync(UpdateUserRole model);
         Task<string> DeleteAsync(string id);
     }
 }

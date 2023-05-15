@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ElectronicAssistantAPI.BLL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.BLL.ViewModels.PersonnelManagement;
+using ElectronicAssistantAPI.DAL.Extentions;
 using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.Repository;
 using ElectronicAssistantAPI.DAL.Repository.PersonnelManagement;
@@ -14,6 +15,7 @@ namespace ElectronicAssistantAPI.BLL.Services.PersonnelManagement
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IRepository<Position> _positionsRepository;
         private readonly ILogger<UserService> _logger;
         private readonly IMapper _mapper;
@@ -21,12 +23,14 @@ namespace ElectronicAssistantAPI.BLL.Services.PersonnelManagement
         public UserService(
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
+            SignInManager<User> signInManager,
             ILogger<UserService> logger,
             IRepository<Position> positionsRepository,
             IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
             _logger = logger;
             _positionsRepository = positionsRepository;
             _mapper = mapper;
@@ -84,35 +88,86 @@ namespace ElectronicAssistantAPI.BLL.Services.PersonnelManagement
                 return null;
             }
 
-            var viewModel = _mapper.Map<UserCompleteViewModel>(user);
-            viewModel.FullName = user.GetFullName();
-            
-            var userRoles = await _userManager.GetRolesAsync(user);
-            var roles = new List<UserRole>();
+            return await SetUserCompleteViewModel(user);
+        }
 
-            var allRoles = _roleManager.Roles;
-            foreach (var role in allRoles.OrderBy(o => o))
+        public async Task<UserCompleteViewModel> UpdateAsync(UpdateUser model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
             {
-                UserRole userRole = new UserRole() { Name = role.Name };
-                if (userRoles.FirstOrDefault(o => o == role.Name) != null)
+                _logger.LogError($"Не найден пользователь с ID '{model.Id}'.");
+                return null;
+            }
+
+            user.Convert(model);
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                _logger.LogError($"Ошибка обновления данных пользователя с ID '{user.Id}'.");
+                return null;
+            }
+
+            return await SetUserCompleteViewModel(user);
+        }
+
+        public async Task<UserCompleteViewModel> UpdatePasswordAsync(UpdateUserPassword model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                _logger.LogError($"Не найден пользователь с ID '{model.Id}'.");
+                return null;
+            }
+
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (!changePasswordResult.Succeeded)
+            {
+                foreach (var error in changePasswordResult.Errors)
                 {
-                    userRole.IsRoleAssigned = true;
+                    _logger.LogError(error.Description);
                 }
 
-                roles.Add(userRole);
+                return null;
             }
 
-            viewModel.Roles= roles;
+            await _signInManager.RefreshSignInAsync(user);
+            return await SetUserCompleteViewModel(user);
+        }
 
-            string? position = "";
-            if (!string.IsNullOrEmpty(user.PositionId))
+        public async Task<UserCompleteViewModel> UpdateRoleAsync(UpdateUserRole model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
             {
-                var result = await ((PositionsRepository)_positionsRepository).GetPositionByIdAsync(user.PositionId);
-                position = result.Name;
+                _logger.LogError($"Не найден пользователь с ID '{model.Id}'.");
+                return null;
             }
-            viewModel.Position = position;
 
-            return viewModel;
+            var userRoles = await _userManager.GetRolesAsync(user);
+            foreach (var item in model.Roles)
+            {
+                if (item.IsRoleAssigned && userRoles.FirstOrDefault(o => o == item.Name) == null)
+                {
+                    var result = await _userManager.AddToRoleAsync(user, item.Name);
+                    if (!result.Succeeded)
+                    {
+                        _logger.LogError($"Ошибка при добавлении роли '{item.Name}' пользователю '{user.Email}'.");
+                        return null;
+                    }
+                }
+                else if(!item.IsRoleAssigned && userRoles.FirstOrDefault(o => o == item.Name) != null)
+                {
+                    var result = await _userManager.RemoveFromRolesAsync(user, userRoles);
+                    if (!result.Succeeded)
+                    {
+                        _logger.LogError($"Ошибка при удалении роли '{item.Name}' пользователю '{user.Email}'.");
+                        return null;
+                    }
+                }
+            }
+
+            return await SetUserCompleteViewModel(user);
         }
 
         public async Task<string> DeleteAsync(string id)
@@ -134,6 +189,36 @@ namespace ElectronicAssistantAPI.BLL.Services.PersonnelManagement
             {
                 return $"Не найден пользователь с ID '{id}'.";
             }
+        }
+
+        public async Task<UserCompleteViewModel> SetUserCompleteViewModel(User user)
+        {
+            var viewModel = _mapper.Map<UserCompleteViewModel>(user);
+            viewModel.FullName = user.GetFullName();
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var roles = new List<UserRole>();
+
+            var allRoles = _roleManager.Roles;
+            foreach (var role in allRoles.OrderBy(o => o))
+            {
+                UserRole userRole = new UserRole() { Name = role.Name };
+                if (userRoles.FirstOrDefault(o => o == role.Name) != null)
+                {
+                    userRole.IsRoleAssigned = true;
+                }
+
+                roles.Add(userRole);
+            }
+
+            viewModel.Roles = roles;
+
+            if (!string.IsNullOrEmpty(user.PositionId))
+            {
+                viewModel.Position = await ((PositionsRepository)_positionsRepository).GetPositionByIdAsync(user.PositionId);
+            }
+
+            return viewModel;
         }
     }
 }
