@@ -10,7 +10,7 @@ using NpgsqlTypes;
 using System;
 using System.Transactions;
 
-namespace ElectronicAssistantAPI.Controllers
+namespace ElectronicAssistantAPI.Controllers.PersonnelManagement
 {
     [Authorize]
     [ApiController]

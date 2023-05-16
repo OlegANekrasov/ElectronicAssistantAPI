@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ElectronicAssistantAPI.Controllers
+namespace ElectronicAssistantAPI.Controllers.PersonnelManagement
 {
     [Authorize]
     [ApiController]
@@ -36,7 +36,7 @@ namespace ElectronicAssistantAPI.Controllers
             try
             {
                 var model = await _userService.GetByIdAsync(id);
-                if(model == null)
+                if (model == null)
                     return NotFound();
 
                 return new OkObjectResult(model);
@@ -59,7 +59,7 @@ namespace ElectronicAssistantAPI.Controllers
 
             return Ok(result);
         }
-        
+
         [HttpPatch(Name = "UpdateRoles")]
         public async Task<IActionResult> UpdateRoles([FromBody] UpdateUserRoleViewModel viewModel)
         {
@@ -77,7 +77,7 @@ namespace ElectronicAssistantAPI.Controllers
 
             return BadRequest("Ошибка при изменении пароля пользователя.");
         }
-        
+
         [HttpPatch(Name = "UpdatePassword")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdateUserPasswordViewModel viewModel)
         {
@@ -95,7 +95,7 @@ namespace ElectronicAssistantAPI.Controllers
 
             return BadRequest("Ошибка при изменении пароля пользователя.");
         }
-        
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<UserCompleteViewModel>> Delete(string id)
         {

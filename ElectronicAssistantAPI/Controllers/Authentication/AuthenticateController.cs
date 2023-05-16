@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ElectronicAssistantAPI.Controllers
+namespace ElectronicAssistantAPI.Controllers.Authentication
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -87,8 +87,8 @@ namespace ElectronicAssistantAPI.Controllers
 
             if (!await _roleManager.RoleExistsAsync(UserRoles.EquipmentManagement))
                 await _roleManager.CreateAsync(new IdentityRole(UserRoles.EquipmentManagement));
-            
-            if(_userManager.Users.Count() == 1)
+
+            if (_userManager.Users.Count() == 1)
                 await _userManager.AddToRoleAsync(user, UserRoles.Administrator);
             else
                 await _userManager.AddToRoleAsync(user, UserRoles.User);
