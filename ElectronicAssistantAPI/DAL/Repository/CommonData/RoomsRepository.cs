@@ -1,4 +1,5 @@
-﻿using ElectronicAssistantAPI.BLL.Models.PersonnelManagement;
+﻿using ElectronicAssistantAPI.BLL.Models.CommonData;
+using ElectronicAssistantAPI.BLL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.EF;
 using ElectronicAssistantAPI.DAL.Models.CommonData;
 using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
@@ -22,29 +23,29 @@ namespace ElectronicAssistantAPI.DAL.Repository.CommonData
             return await Set.FindAsync(id);
         }
 
-        public async Task<Room> AddRoomAsync(AddPosition model)
+        public async Task<Room> AddRoomAsync(AddRoom model)
         {
-            var position = new Room()
+            var room = new Room()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = model.Name,
                 Description = model.Description,
             };
 
-            await CreateAsync(position);
-            return position;
+            await CreateAsync(room);
+            return room;
         }
 
-        public async Task<Room> UpdateRoomAsync(UpdatePosition model)
+        public async Task<Room> UpdateRoomAsync(UpdateRoom model)
         {
-            var position = await GetByIdAsync(model.Id);
-            if (position != null)
+            var room = await GetByIdAsync(model.Id);
+            if (room != null)
             {
-                position.Name = model.Name;
-                position.Description = model.Description;
+                room.Name = model.Name;
+                room.Description = model.Description;
 
-                await UpdateAsync(position);
-                return position;
+                await UpdateAsync(room);
+                return room;
             }
 
             return null;

@@ -18,7 +18,7 @@ namespace ElectronicAssistantAPI.DAL.Models.EquipmentManagement
         public Room? Room { get; set; }
 
         public string StatusId { get; set; }
-        public Status? Status { get; set; }
+        public EquipmentStatus? Status { get; set; }
 
         public string TypeEquipmentId { get; set; }
         public TypeEquipment? TypeEquipment { get; set; }

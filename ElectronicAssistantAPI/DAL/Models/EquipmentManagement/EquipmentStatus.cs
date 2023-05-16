@@ -3,7 +3,7 @@
 namespace ElectronicAssistantAPI.DAL.Models.EquipmentManagement
 {
     [Table("Statuses")]
-    public class Status
+    public class EquipmentStatus
     {
         public string Id { get; set; }
 
