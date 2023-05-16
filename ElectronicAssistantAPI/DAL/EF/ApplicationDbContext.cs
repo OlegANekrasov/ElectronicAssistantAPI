@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
+using ElectronicAssistantAPI.DAL.Models.CommonData;
 
 namespace ElectronicAssistantAPI.DAL.EF
 {

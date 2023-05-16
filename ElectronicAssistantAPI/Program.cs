@@ -4,7 +4,9 @@ using ElectronicAssistantAPI.BLL.Services.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.EF;
 using ElectronicAssistantAPI.DAL.Extentions;
 using ElectronicAssistantAPI.DAL.Models.Authentication;
+using ElectronicAssistantAPI.DAL.Models.CommonData;
 using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
+using ElectronicAssistantAPI.DAL.Repository.CommonData;
 using ElectronicAssistantAPI.DAL.Repository.PersonnelManagement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -113,6 +115,7 @@ builder.Services.AddSwaggerGen(opt =>
 
 builder.Services.AddUnitOfWork();
 builder.Services.AddCustomRepository<Position, PositionsRepository>();
+builder.Services.AddCustomRepository<Room, RoomsRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPositionService, PositionService>();
