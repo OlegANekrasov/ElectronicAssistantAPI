@@ -29,7 +29,8 @@ namespace ElectronicAssistantAPI.DAL.Repository.EquipmentManagement
                 Id = Guid.NewGuid().ToString(),
                 Name = model.Name,
                 Description = model.Description,
-                TypeValue = model.TypeValue
+                TypeValue = model.TypeValue,
+                TypeEquipmentId = model.TypeEquipmentId
             };
 
             await CreateAsync(characteristic);
@@ -52,7 +53,7 @@ namespace ElectronicAssistantAPI.DAL.Repository.EquipmentManagement
             return null;
         }
 
-        public async Task DeleteCharacteristic(string id)
+        public async Task DeleteCharacteristicAsync(string id)
         {
             await DeleteAsync(id);
         }
