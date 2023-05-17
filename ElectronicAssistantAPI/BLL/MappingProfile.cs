@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using ElectronicAssistantAPI.BLL.Models.CommonData;
+using ElectronicAssistantAPI.BLL.Models.EquipmentManagement.EquipmentStatus;
 using ElectronicAssistantAPI.BLL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.BLL.ViewModels.CommonData;
+using ElectronicAssistantAPI.BLL.ViewModels.EquipmentManagement.EquipmentStatus;
 using ElectronicAssistantAPI.BLL.ViewModels.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
 using System.Xml;
@@ -25,6 +27,10 @@ namespace ElectronicAssistantAPI.BLL
             CreateMap<AddRoomViewModel, AddRoom>();
             CreateMap<DelRoomViewModel, DelRoom>();
             CreateMap<UpdateRoomViewModel, UpdateRoom>();
+
+            CreateMap<AddEquipmentStatusViewModel, AddEquipmentStatus>();
+            CreateMap<DelEquipmentStatusViewModel, DelEquipmentStatus>();
+            CreateMap<UpdateEquipmentStatusViewModel, UpdateEquipmentStatus>();
         }
     }
 }
