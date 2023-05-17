@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using ElectronicAssistantAPI.BLL;
+using ElectronicAssistantAPI.BLL.Services.CommonData;
+using ElectronicAssistantAPI.BLL.Services.EquipmentManagement;
 using ElectronicAssistantAPI.BLL.Services.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.EF;
 using ElectronicAssistantAPI.DAL.Extentions;
 using ElectronicAssistantAPI.DAL.Models.Authentication;
 using ElectronicAssistantAPI.DAL.Models.CommonData;
+using ElectronicAssistantAPI.DAL.Models.EquipmentManagement;
 using ElectronicAssistantAPI.DAL.Models.PersonnelManagement;
 using ElectronicAssistantAPI.DAL.Repository.CommonData;
+using ElectronicAssistantAPI.DAL.Repository.EquipmentManagement;
 using ElectronicAssistantAPI.DAL.Repository.PersonnelManagement;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -116,9 +120,14 @@ builder.Services.AddSwaggerGen(opt =>
 builder.Services.AddUnitOfWork();
 builder.Services.AddCustomRepository<Position, PositionsRepository>();
 builder.Services.AddCustomRepository<Room, RoomsRepository>();
+builder.Services.AddCustomRepository<EquipmentStatus, EquipmentStatusRepository>();
+builder.Services.AddCustomRepository<TypeEquipment, TypeEquipmentRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPositionService, PositionService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IEquipmentStatusService, EquipmentStatusService>();
+builder.Services.AddScoped<ITypeEquipmentService, TypeEquipmentService>();
 
 var app = builder.Build();
 
